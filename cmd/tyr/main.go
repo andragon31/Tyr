@@ -26,6 +26,7 @@ func main() {
 	rootCmd.AddCommand(serveCmd)
 	rootCmd.AddCommand(mcpCmd)
 	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(setupCmd)
 
 	rootCmd.PersistentFlags().StringP("data-dir", "d", ".tyr", "Data directory")
 
@@ -101,6 +102,6 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show version",
 	Run: func(cmd *cobra.Command, args []string) {
-		logger.Info("Tyr v1.0.0")
+		logger.Info("Tyr v1.0.0 - Security, Validation & Standards Layer")
 	},
 }
