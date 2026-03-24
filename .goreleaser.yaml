@@ -1,0 +1,129 @@
+project_name: tyr
+version: 2
+git:
+  tag_template: 'v{{ .Version }}'
+  changelog:
+    sort: asc
+    filters:
+      exclude:
+        - '^docs:'
+        - '^test:'
+        - '^chore:'
+        - '^refactor:'
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: linux-amd64
+    goos: linux
+    goarch: amd64
+    env:
+      - CGO_ENABLED=0
+    main: ./cmd/tyr
+    binary: tyr
+    dir: dist
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .Commit }}
+      - -X main.date={{ .Date }}
+    checksum:
+      name_template: 'checksums.txt'
+    format: binary
+
+  - id: linux-arm64
+    goos: linux
+    goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    main: ./cmd/tyr
+    binary: tyr
+    dir: dist
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .Commit }}
+      - -X main.date={{ .Date }}
+
+  - id: darwin-amd64
+    goos: darwin
+    goarch: amd64
+    env:
+      - CGO_ENABLED=0
+    main: ./cmd/tyr
+    binary: tyr
+    dir: dist
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .Commit }}
+      - -X main.date={{ .Date }}
+
+  - id: darwin-arm64
+    goos: darwin
+    goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    main: ./cmd/tyr
+    binary: tyr
+    dir: dist
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .Commit }}
+      - -X main.date={{ .Date }}
+
+  - id: windows-amd64
+    goos: windows
+    goarch: amd64
+    env:
+      - CGO_ENABLED=0
+    main: ./cmd/tyr
+    binary: tyr.exe
+    dir: dist
+    ldflags:
+      - -s -w
+      - -X main.version={{ .Version }}
+      - -X main.commit={{ .Commit }}
+      - -X main.date={{ .Date }}
+
+archives:
+  - id: default
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - none:*
+    checksums:
+      name_template: 'checksums.txt'
+
+checksum:
+  algorithm: sha256
+  id: tyr
+  path: '**/checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+release:
+  github:
+    owner: andragon31
+    name: Tyr
+  draft: true
+  prerelease: auto
+  name_template: "{{ .Tag }}"
+  header: |
+    ## Installation
+
+    ### Binary
+    Download the appropriate binary for your platform and add it to your PATH.
+
+    ### From source
+    ```bash
+    go install github.com/andragon31/Tyr@latest
+    ```
+  footer: |
+    ## Documentation
+
+    Visit [https://github.com/andragon31/Tyr](https://github.com/andragon31/Tyr) for full documentation.
