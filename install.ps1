@@ -32,14 +32,9 @@ try {
 }
 
 Write-Host "[2/3] Installing to $INSTALL_DIR..." -ForegroundColor DarkCyan
-if (-not (Test-Path $INSTALL_DIR)) {
-    New-Item -ItemType Directory -Force -Path $INSTALL_DIR | Out-Null
-}
-if (Test-Path $EXE_PATH) { 
-    Remove-Item $EXE_PATH -Force 
-}
-Copy-Item -Path $TMP -Destination $EXE_PATH -Force
-Remove-Item -Path $TMP -Force
+New-Item -ItemType Directory -Force -Path $INSTALL_DIR | Out-Null
+Copy-Item -Path $TMP -Destination $EXE_PATH -Force -ErrorAction Stop
+Remove-Item -Path $TMP -Force -ErrorAction SilentlyContinue
 
 Write-Host "[3/3] Adding to PATH..." -ForegroundColor DarkCyan
 
@@ -83,9 +78,11 @@ try {
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Green
 Write-Host "  tyr init            # Initialize Tyr"
-Write-Host "  tyr mcp             # Start MCP server"
+Write-Host "  tyr mcp            # Start MCP server"
 Write-Host ""
 
 if ($pathAdded) {
     Write-Host "NOTE: If 'tyr' is not found, open a new PowerShell window." -ForegroundColor Yellow
+} else {
+    Write-Host "IMPORTANT: Run as Administrator to install to System PATH" -ForegroundColor Red
 }
